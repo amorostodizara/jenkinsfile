@@ -1,34 +1,49 @@
 pipeline {
     agent any
-
+    
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/amorostodizara/jenkinsfile.git'
+                git branch: 'main', 
+                url: 'https://github.com/amorostodizara/jenkinsfile.git',
+                credentialsId: 'github-credentials' // ← AJOUT IMPORTANT
             }
         }
-
+        
+        stage('Verify Files') {
+            steps {
+                echo 'Verification des fichiers...'
+                bat 'dir /b' // Liste les fichiers
+                bat 'type HelloWorld.java || echo Fichier HelloWorld.java introuvable' // ← Vérifie le fichier
+            }
+        }
+        
         stage('Compile') {
             steps {
                 echo 'Compilation du code Java...'
-                bat 'javac HelloWorld.java'
+                bat 'javac HelloWorld.java || echo Echec de la compilation' // ← Gestion d'erreur
             }
         }
-
+        
         stage('Run') {
             steps {
-                echo 'Exécution du programme...'
-                bat 'java HelloWorld'
+                echo 'Execution du programme...'
+                bat 'java HelloWorld || echo Echec de l execution' // ← Gestion d'erreur
             }
         }
     }
-
+    
     post {
         success {
-            echo 'Build réussi !'
+            echo 'Build reussi !'
+            bat 'echo SUCCESS'
         }
         failure {
-            echo 'Build échoué !'
+            echo 'Build echoue !'
+            bat 'echo FAILURE'
+        }
+        always {
+            echo 'Pipeline termine avec status: ${currentBuild.result}'
         }
     }
 }

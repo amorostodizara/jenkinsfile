@@ -1,9 +1,7 @@
+// HelloWorld.java
 public class HelloWorld {
-    public String getMessage() {
-        return "Hellolo, World";
-    }
-
     public static void main(String[] args) {
-        System.out.println(new HelloWorld().getMessage());
+        System.out.println("Hello World from Jenkins!");
+        System.out.println("Build executed successfully");
     }
 }
