@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Si Maven est configuré dans Jenkins
-        MVN_HOME = "C:\\apache-maven-3.9.11"
+        JAVA_HOME = "C:\\Program Files\\Java\\jdk-17"  // adapte selon ton JDK
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
     }
 
     stages {
@@ -13,39 +13,27 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Compile') {
             steps {
-                echo 'Compilation du projet...'
-                bat "${env.MVN_HOME}\\bin\\mvn clean compile"
+                echo 'Compilation du projet Java...'
+                bat 'javac src\\HelloWorld.java'
             }
         }
 
-        // stage('Unit Tests') {
-        //     steps {
-        //         echo 'Exécution des tests unitaires...'
-        //         bat "${env.MVN_HOME}\\bin\\mvn test"
-        //     }
-        //     post {
-        //         always {
-        //             junit '**/target/surefire-reports/*.xml'
-        //         }
-        //     }
-        // }
-
-        stage('Package') {
+        stage('Run') {
             steps {
-                echo 'Création du package...'
-                bat "${env.MVN_HOME}\\bin\\mvn package"
+                echo 'Exécution du programme...'
+                bat 'java -cp src HelloWorld'
             }
         }
     }
 
     post {
         success {
-            echo 'Build réussi !'
+            echo 'Pipeline terminé avec succès ✅'
         }
         failure {
-            echo 'Build échoué !'
+            echo 'Pipeline échoué ❌'
         }
     }
 }
