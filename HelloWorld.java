@@ -1,7 +1,6 @@
-package main.java;
 public class HelloWorld {
     public String getMessage() {
-        return "Hello, World";
+        return "Hellolo, World";
     }
 
     public static void main(String[] args) {
